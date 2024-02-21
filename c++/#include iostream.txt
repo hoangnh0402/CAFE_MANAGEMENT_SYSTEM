@@ -1,0 +1,155 @@
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+
+using namespace std;
+
+// Hàm nhập mảng
+void nhapMang(double*& a, int& n) {
+    cout << "Nhap kich thuoc cua mang: ";
+    cin >> n;
+
+    a = new double[n];
+
+    cout << "Nhap cac phan tu cua mang:\n";
+    for (int i = 0; i < n; ++i) {
+        cout << "a[" << i << "] = ";
+        cin >> a[i];
+    }
+}
+
+// Hàm sắp xếp mảng tăng dần
+void sapXepTangDan(double* a, int n) {
+    for (int i = 0; i < n - 1; ++i) {
+        for (int j = i + 1; j < n; ++j) {
+            if (a[i] > a[j]) {
+                swap(a[i], a[j]);
+            }
+        }
+    }
+}
+
+// Hàm tính tổng các phần tử có chỉ số chẵn
+double tongPhanTuChan(double* a, int n) {
+    double sum = 0;
+    for (int i = 0; i < n; i += 2) {
+        sum += a[i];
+    }
+    return sum;
+}
+
+// Hàm xuất mảng ra màn hình
+void xuatMang(double* a, int n) {
+    cout << "Mang a: ";
+    for (int i = 0; i < n; ++i) {
+        cout << fixed << setprecision(2) << a[i] << " ";
+    }
+    cout << endl;
+}
+
+// Hàm xuất mảng vào tệp text
+void xuatMangVaoTep(double* a, int n, const char* fileName) {
+    ofstream outFile(fileName);
+
+    outFile << n << endl;
+
+    for (int i = 0; i < n; ++i) {
+        outFile << fixed << setprecision(2) << a[i] << " ";
+    }
+
+    outFile << "\nend";
+    outFile.close();
+}
+
+// Hàm tìm và in ra phần tử lớn nhất và lớn thứ nhì trong mảng
+void timPhanTuLonNhat(double* a, int n) {
+    if (n < 2) {
+        cout << "Mang khong co du so phan tu de tim lớn nhất và lớn thứ nhì.\n";
+        return;
+    }
+
+    double max1, max2;
+    max1 = max2 = a[0];
+
+    for (int i = 1; i < n; ++i) {
+        if (a[i] > max1) {
+            max2 = max1;
+            max1 = a[i];
+        } else if (a[i] > max2 && a[i] != max1) {
+            max2 = a[i];
+        }
+    }
+
+    cout << "Phan tu lon nhat: " << max1 << endl;
+    cout << "Phan tu lon thu nhi: " << max2 << endl;
+}
+
+// Hàm kiểm tra xem mảng có chứa ba số liên tiếp đều dương hay không
+bool kiemTraBaSoDuongLienTiep(double* a, int n) {
+    for (int i = 0; i < n - 2; ++i) {
+        if (a[i] > 0 && a[i + 1] > 0 && a[i + 2] > 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+// Hàm xóa các phần tử lớn hơn 5 ra khỏi mảng
+void xoaPhanTuLonHon5(double*& a, int& n) {
+    int count = 0;
+    for (int i = 0; i < n; ++i) {
+        if (a[i] > 5) {
+            count++;
+        }
+    }
+
+    if (count == 0) {
+        cout << "Khong co phan tu lon hon 5 de xoa.\n";
+        return;
+    }
+
+    double* temp = new double[n - count];
+    int j = 0;
+
+    for (int i = 0; i < n; ++i) {
+        if (a[i] <= 5) {
+            temp[j++] = a[i];
+        }
+    }
+
+    delete[] a;
+    a = temp;
+    n -= count;
+    cout << "Da xoa " << count << " phan tu lon hon 5.\n";
+}
+
+int main() {
+    double* a;
+    int n;
+
+    nhapMang(a, n);
+
+    sapXepTangDan(a, n);
+
+    cout << "Tong cac phan tu co chi so chan: " << tongPhanTuChan(a, n) << endl;
+
+    xuatMang(a, n);
+
+    xuatMangVaoTep(a, n, "output.txt");
+
+    timPhanTuLonNhat(a, n);
+
+    if (kiemTraBaSoDuongLienTiep(a, n)) {
+        cout << "Mang chua ba so duong lien tiep.\n";
+    } else {
+        cout << "Mang khong chua ba so duong lien tiep.\n";
+    }
+
+    xoaPhanTuLonHon5(a, n);
+
+    xuatMang(a, n);
+
+    delete[] a;
+
+    return 0;
+}
