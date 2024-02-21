@@ -1,0 +1,23 @@
+#include <iostream>
+#include <fstream>
+
+const int MAX_LINE_LENGTH = 256; // Đặt chiều dài tối đa của mỗi dòng
+
+int main() {
+    std::ifstream inFile("FIRSTFILE.txt");
+
+    if (inFile.is_open()) {
+        char line[MAX_LINE_LENGTH];
+
+        while (inFile.getline(line, MAX_LINE_LENGTH)) {
+            std::cout << line << std::endl;
+        }
+
+        inFile.close();
+    } else {
+        std::cerr << "Không thể mở tệp tin FIRSTFILE.txt" << std::endl;
+        return 1;
+    }
+
+    return 0;
+}
